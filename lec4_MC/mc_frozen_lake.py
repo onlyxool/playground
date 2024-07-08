@@ -7,15 +7,16 @@ from mc_maze_agent import Agent
 '''@brief transform the state value to a row and column in the environment
 '''
 def get_row_column(state):
-    row = int(state/4)
-    column = state - (row * 4)
+    row = int(state/5)
+    column = state - (row * 5)
     return row, column
 
 
 '''@brief simulate the environment with the agents taught policy
 '''
 def simulate_episodes(agent, num_episodes=3):
-    env2 = gym.make('FrozenLake-v1',  desc=None, render_mode="human", map_name="4x4", is_slippery=False)
+    description=['SFFFH', 'FFHFF', 'FFFFF', 'HFFFF', 'FFFFG']
+    env2 = gym.make('FrozenLake-v1',  desc=description, render_mode="human", map_name=None, is_slippery=False)
     for _ in range(num_episodes):
         done = False
         state, _ = env2.reset()
@@ -55,7 +56,8 @@ def main():
     NUM_EPISODES = 50000
 
     # Define the Blackjack environment
-    env = gym.make('FrozenLake-v1', desc=None, map_name="4x4", is_slippery=False)
+    description=['SFFFH', 'FFHFF', 'FFFFF', 'HFFFF', 'FFFFG']
+    env = gym.make('FrozenLake-v1', desc=description, map_name=None, is_slippery=False)
 
     # Define the behavior policy (random policy for exploration)
     behavior_policy = np.ones((env.observation_space.n, env.action_space.n)) / env.action_space.n
@@ -97,7 +99,7 @@ def main():
     print(Q_mc)
 
     print("\nTarget Policy (MC):")
-    pi_mat_mc = np.empty((env.action_space.n, env.action_space.n), dtype=str)
+    pi_mat_mc = np.empty((5, 5), dtype=str)
     for i, action in enumerate(pi_mc):
         row, column = get_row_column(i)
         pi_mat_mc[row][column] = action_desc[action]
@@ -110,7 +112,7 @@ def main():
     print(Q_vi)
 
     print("\nTarget Policy (Value Iteration):")
-    pi_mat_vi = np.empty((env.action_space.n, env.action_space.n), dtype=str)
+    pi_mat_vi = np.empty((5, 5), dtype=str)
     for i, action in enumerate(pi_vi):
         row, column = get_row_column(i)
         pi_mat_vi[row][column] = action_desc[action]
