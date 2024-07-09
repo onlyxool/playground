@@ -176,22 +176,37 @@ def q_learning(env, learning_rate, exploration_factor):
     return agent, total_steps_per_episode, return_per_episode, cumulative_reward_per_episode
 
 
-def plot_metrics(episodes, steps, rewards, alpha, epsilon, filename):
-    plt.figure(figsize=(12, 5))
+def plot_metrics(episodes, steps, rewards, alpha, epsilon, filename, window=100):
+    avg_cumulative_rewards = np.cumsum(rewards) / (np.arange(len(rewards)) + 1)
+    plt.figure(figsize=(15, 10))
 
-    plt.subplot(1, 2, 1)
+    plt.subplot(2, 2, 1)
     plt.plot(episodes, steps)
     plt.xlabel('Episode')
     plt.ylabel('Steps per Episode')
-    plt.title('Steps per Episode Over Time. Alpha:'+str(alpha)+'Epsilon'+str(epsilon))
+    plt.title('Steps per Episode Over Time. Alpha:'+str(alpha)+' Epsilon'+str(epsilon))
 
-    plt.subplot(1, 2, 2)
+    plt.subplot(2, 2, 2)
     plt.plot(episodes, rewards)
     plt.xlabel('Episode')
     plt.ylabel('Return per Episode')
-    plt.title('Return per Episode Over Time. Alpha:'+str(alpha)+'Epsilon'+str(epsilon))
+    plt.title('Return per Episode Over Time. Alpha:'+str(alpha)+' Epsilon'+str(epsilon))
 
+    plt.subplot(2, 2, 3)
+    plt.plot(episodes, avg_cumulative_rewards)
+    plt.xlabel('Episode')
+    plt.ylabel('Average Cumulative Reward')
+    plt.title('Average Cumulative Reward Over Time. Alpha:'+str(alpha)+' Epsilon'+str(epsilon))
+
+    # Smoothing average cumulative reward
+    smoothed_avg_cumulative_rewards = np.convolve(avg_cumulative_rewards, np.ones(window)/window, mode='valid')
+    plt.subplot(2, 2, 4)
+    plt.plot(episodes[:len(smoothed_avg_cumulative_rewards)], smoothed_avg_cumulative_rewards)
+    plt.xlabel('Episode')
+    plt.ylabel(f'Avg. Cumulative Reward (Smoothed over {window} episodes)')
+    plt.title(f'Smoothed Average Cumulative Reward Over Time. Alpha:'+str(alpha)+' Epsilon'+str(epsilon))
     plt.tight_layout()
+
     plt.savefig(filename)
 
 
