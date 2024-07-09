@@ -16,7 +16,7 @@ def describe_env(env: gym.Env):
     obs = env.observation_space
     num_obs = env.observation_space.n
     reward_range = env.reward_range
-    action_desc = { 
+    action_desc = {
         0: "Move south (down)",
         1: "Move north (up)",
         2: "Move east (right)",
@@ -27,7 +27,7 @@ def describe_env(env: gym.Env):
     print("Observation space: ", obs)
     print("Observation space size: ", num_obs)
     print("Reward Range: ", reward_range)
-    
+
     print("Number of actions: ", num_actions)
     print("Action description: ", action_desc)
     return num_obs, num_actions
@@ -36,7 +36,7 @@ def describe_env(env: gym.Env):
 '''@brief Get the string description of the action
 '''
 def get_action_description(action):
-    action_desc = { 
+    action_desc = {
         0: "Move south (down)",
         1: "Move north (up)",
         2: "Move east (right)",
@@ -58,9 +58,9 @@ def describe_obs(obs):
     }
     obs_dict = breakdown_obs(obs)
     print("Passenger is at: {0}, wants to go to {1}. Taxi currently at ({2}, {3})".format(
-        obs_desc[obs_dict["passenger_location"]], 
-        obs_desc[obs_dict["destination"]], 
-        obs_dict["taxi_row"], 
+        obs_desc[obs_dict["passenger_location"]],
+        obs_desc[obs_dict["destination"]],
+        obs_dict["taxi_row"],
         obs_dict["taxi_col"]))
 
 '''@brief Takes an observation for the 'taxi-v3' environment and returns details observation space description
@@ -81,14 +81,14 @@ def breakdown_obs(obs):
     obs /= 5
     # X % 5 --> taxi_col
     taxi_col = obs % 5
-    # X -= remainder, X /=5 
+    # X -= remainder, X /=5
     obs -= taxi_col
     # X --> taxi_row
     taxi_row = obs
     observation_dict= {
-        "destination": destination, 
+        "destination": destination,
         "passenger_location": passenger_location,
-        "taxi_row": taxi_row, 
+        "taxi_row": taxi_row,
         "taxi_col": taxi_col
     }
     return observation_dict
